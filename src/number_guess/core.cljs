@@ -47,7 +47,8 @@
   []
   (let [{max-turns :max-turns
          current-turn :current-turn} @app-state]
-    (- max-turns current-turn)))
+    ;; Add one for display, so it's not zero indexed.
+    (+ 1 (- max-turns current-turn))))
 
 ;; TODO - Logic for displaying the message/end game should be here.
 (defn make-guess
