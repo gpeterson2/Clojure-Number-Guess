@@ -131,7 +131,7 @@
   "Creates the main game form."
   []
   [:div {:class "container-fluid"}
-    [:div {:class "col-md-6 col-md-offset-3"}
+    [:div {:class "col-md-6 col-md-offset-3 content"}
       [:h1 {:class "text-center"} "Number Guess"]
 
        [:div [reset-game]]

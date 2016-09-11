@@ -1,2 +1,24 @@
 /* some style */
 
+body {
+    background-color: #9cc0b6;
+}
+
+.content {
+    background-color: #fff;
+    border-radius: 15px;
+    margin-top: 15px;
+    margin-bottom: 15px;
+    min-height: 600px;
+}
+
+.btn-default,
+.btn-default:focus {
+    background-color: #39a5d3;
+    color: #1a3b6b;
+}
+
+.btn-default:hover {
+    background-color: #ecddc6;
+    color: #1a3b6b;
+}
