@@ -143,17 +143,19 @@
     [:div {:class "col-md-6 col-md-offset-3 content"}
       [:h1 {:class "text-center"} "Number Guess"]
 
-       [:div [reset-game]]
+        [:div [reset-game]]
 
-       [:div [show-success-message]]
-       [:div [show-failure-message]]
+        [:div {:class "messages"}
+          [:div [show-success-message]]
+          [:div [show-failure-message]]
+        ]
 
-       [:div [show-main-game]]
+        [:div [show-main-game]]
 
-       ; Debug only
-       ;[:div (:rand-value @app-state)]
+        ; Debug only
+        ;[:div (:rand-value @app-state)]
 
-       [:div {:class "padding"}]]])
+        [:div {:class "padding"}]]])
 
 (reagent/render-component [number-guess]
                           (. js/document (getElementById "app")))
