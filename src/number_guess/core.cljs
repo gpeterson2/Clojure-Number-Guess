@@ -103,6 +103,13 @@
         guess (js/parseInt raw-guess)]
     (swap! app-state assoc :guess guess)))
 
+(defn submit-on-enter
+  "Runs the guess on hitting enter."
+  [e]
+
+  (when (= (.-keyCode e) 13)
+    (make-guess)))
+
 (defn show-main-game
   "Displays the game-state when not in a restart, success, or failure state."
   []
@@ -118,7 +125,8 @@
           [:input {:type "input"
                    :class "form-control"
                    :id "guess"
-                   :on-change update-guess}]
+                   :on-change update-guess
+                   :on-key-up submit-on-enter}]
 
           [:br]
           [:input {:type "button"
