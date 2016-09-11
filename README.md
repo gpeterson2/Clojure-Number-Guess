@@ -1,14 +1,17 @@
-# number-guess
+# Clojure/Reagent Number Guess
 
-A game to guess a random number using reagent.
+A game to guess a random number using clojure and reagent.
 
 ## Overview
-
-Test out reagent with clojure instead of plain javascript react.
 
 This will generate a number and then allow the user to guess a number of times
 telling them whether the guess was higher or lower. Until you guess the correct
 number or run out of guesses.
+
+This is a simple test of the technology. Om is probably more popular to use with
+clojurescript, but reagent seemed simpler to get up and running.
+
+This is run using figwheel. See the setup below on how to run the project.
 
 ## Setup
 
