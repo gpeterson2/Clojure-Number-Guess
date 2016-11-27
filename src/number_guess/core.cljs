@@ -43,12 +43,23 @@
         (< guess rand-value) [:div {:class "alert alert-info"} "Guess is too low"]))))
 
 (defn remaining-turns
-  "Determins remaining turns."
+  "Determines remaining turns."
   []
   (let [{max-turns :max-turns
          current-turn :current-turn} @app-state]
     ;; Add one for display, so it's not zero indexed.
     (+ 1 (- max-turns current-turn))))
+
+(defn validate-guess
+  "Validates that the guess value."
+  [guess]
+
+  ;; Check if it's a valid number, then check if it's in the correct ranges
+  ;; TODO - make the ranges constants.
+  (if (re-find #"^[0-9]*$" (str guess))
+    (let [numeric-guess (js/parseInt guess)]
+      (and (< 0 numeric-guess) (> 100 numeric-guess)))
+    false))
 
 ;; TODO - Logic for displaying the message/end game should be here.
 (defn make-guess
@@ -59,15 +70,16 @@
          rand-value :rand-value
          guess :guess} @app-state]
 
-    (if (>= current-turn max-turns)
-      (swap! app-state assoc
-             :game-state :show-failure)
-      (if (= guess rand-value)
+    (when (validate-guess guess)
+      (if (>= current-turn max-turns)
         (swap! app-state assoc
-               :game-state :show-success)
-        (swap! app-state assoc
-               :game-state :show-comparison
-               :current-turn (inc current-turn))))))
+               :game-state :show-failure)
+        (if (= guess rand-value)
+          (swap! app-state assoc
+                 :game-state :show-success)
+          (swap! app-state assoc
+                 :game-state :show-comparison
+                 :current-turn (inc current-turn)))))))
 
 (defn show-success-message
   "Displays the success message when state is 'show-success'."
@@ -87,10 +99,6 @@
       [:div {:class "alert alert-danger"}
        "Failure. Number was " rand-value])))
 
-;; TODO - validate that the number is a number
-(defn validate-guess []
-  ())
-
 (defn update-guess
   "Updates the app-state guess on change."
   [e]
@@ -99,9 +107,21 @@
   ;; as to whether what you are currently typing is correct.
   (swap! app-state assoc :game-state :show-game)
 
-  (let [raw-guess (.-target.value e)
-        guess (js/parseInt raw-guess)]
-    (swap! app-state assoc :guess guess)))
+  (let [raw-guess (.-target.value e)]
+    ;; Only want to allow numeric entries, although there's no real reason to
+    ;; set the value here, that should probably be done in the submit. That
+    ;; might be difficult without a reference to the element, though.
+    (if-not (validate-guess raw-guess)
+      (let [cleaned (clojure.string/replace raw-guess #"[^0-9]" "")
+            numeric-guess (js/parseInt cleaned)]
+        ;; Really should show an error and not submit for invalid ranges...
+        ;; Well, the entire thing really. That's a next step.
+        (cond
+          (< numeric-guess 0) (set! (.-target.value e) 0)
+          (> numeric-guess 100) (set! (.-target.value e) 100)
+          (js/isNaN numeric-guess) (set! (.-target.value e) "")
+          :else (set! (.-target.value e) numeric-guess)))
+      (swap! app-state assoc :guess (js/parseInt raw-guess)))))
 
 (defn submit-on-enter
   "Runs the guess on hitting enter."
