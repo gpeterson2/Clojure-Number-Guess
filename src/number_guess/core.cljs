@@ -23,13 +23,12 @@
 ;; TOOD - make a "default" value and just copy it here?
 (defn reset-game []
   [:div
-    [:input {:type "button"
-             :class "btn btn-default"
-             :value "Reset Game"
-             :on-click #(swap! app-state assoc
-                               :game-state :show-game
-                               :current-turn 1
-                               :rand-value (rand-int 100))}]])
+    [:input.btn.btn-default {:type "button"
+                             :value "Reset Game"
+                             :on-click #(swap! app-state assoc
+                                               :game-state :show-game
+                                               :current-turn 1
+                                               :rand-value (rand-int 100))}]])
 
 (defn display-message
   "Displays the 'too high' or 'too low' message."
@@ -39,8 +38,8 @@
          guess :guess} @app-state]
     (when (= game-state :show-comparison)
       (cond
-        (> guess rand-value) [:div {:class "alert alert-info"} "Guess is too high"]
-        (< guess rand-value) [:div {:class "alert alert-info"} "Guess is too low"]))))
+        (> guess rand-value) [:div.alert.alert-info "Guess is too high"]
+        (< guess rand-value) [:div.alert.alert-info "Guess is too low"]))))
 
 (defn remaining-turns
   "Determines remaining turns."
@@ -87,7 +86,7 @@
   (let [{game-state :game-state
          rand-value :rand-value} @app-state]
     (when (= game-state :show-success)
-      [:div {:class "alert alert-success"}
+      [:div.alert.alert-success
        "Correct! Number was " rand-value])))
 
 (defn show-failure-message
@@ -96,7 +95,7 @@
   (let [{game-state :game-state
          rand-value :rand-value} @app-state]
     (when (= game-state :show-failure)
-      [:div {:class "alert alert-danger"}
+      [:div.alert.alert-danger
        "Failure. Number was " rand-value])))
 
 (defn update-guess
@@ -135,37 +134,35 @@
   []
   (let [{game-state :game-state} @app-state]
     (when (or (= game-state :show-game) (= game-state :show-comparison))
-      [:div {:class "form"}
+      [:div.form
 
         [:h2 "Remaining Turns " (remaining-turns)]
 
-        [:div {:class "form-group"}
+        [:div.form-group
           [:label {:for "guess"} "Guess:"]
 
-          [:input {:type "input"
-                   :class "form-control"
-                   :id "guess"
-                   :on-change update-guess
-                   :on-key-up submit-on-enter}]
+          [:input.form-control {:type "input"
+                                :id "guess"
+                                :on-change update-guess
+                                :on-key-up submit-on-enter}]
 
           [:br]
-          [:input {:type "button"
-                   :class "btn btn-default"
-                   :value "Make Guess"
-                   :on-click make-guess}]]
+          [:input.btn.btn-default {:type "button"
+                                   :value "Make Guess"
+                                   :on-click make-guess}]]
 
         [:div [display-message]]])))
 
 (defn number-guess
   "Creates the main game form."
   []
-  [:div {:class "container-fluid"}
-    [:div {:class "col-md-6 col-md-offset-3 content"}
-      [:h1 {:class "text-center"} "Number Guess"]
+  [:div.container-fluid
+    [:div.col-md-6.col-md-offset-3.content
+      [:h1.text-cetner "Number Guess"]
 
         [:div [reset-game]]
 
-        [:div {:class "messages"}
+        [:div.messages
           [:div [show-success-message]]
           [:div [show-failure-message]]
         ]
@@ -175,7 +172,7 @@
         ; Debug only
         ;[:div (:rand-value @app-state)]
 
-        [:div {:class "padding"}]]])
+        [:div.padding]]])
 
 (reagent/render-component [number-guess]
                           (. js/document (getElementById "app")))
